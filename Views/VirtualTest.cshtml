@@ -1,0 +1,137 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    Layout = "master.cshtml";
+}
+
+<section class="section section--themed section--header section--content-center-bottom">
+  <div class="section__hero-content">
+  <h1 class="no-air">Redirect Methods Test Page</h1>
+  </div>
+</section>
+
+<div class="container" style="padding: 40px 20px;">
+    <h1>Redirect Methods Test Page</h1>
+    
+    <div class="alert alert-info" style="background-color: #d1ecf1; border: 1px solid #bee5eb; padding: 15px; margin-bottom: 20px; border-radius: 4px;">
+        <h4>Current Page Information</h4>
+        <p><strong>Current URL:</strong> @Context.Request.Path</p>
+        <p><strong>Content ID:</strong> @Model.Id</p>
+        <p><strong>Content Name:</strong> @Model.Name</p>
+        <p><strong>Content URL:</strong> @Model.Url()</p>
+        <p><strong>Is Virtual Page:</strong> @(Context.Request.Path != Model.Url() ? "Yes - This is a virtual page!" : "No - This is the actual content page")</p>
+    </div>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success" style="background-color: #d4edda; border: 1px solid #c3e6cb; padding: 15px; margin-bottom: 20px; border-radius: 4px;">
+            <h4>POST Result (via @TempData["Method"])</h4>
+            <p>@TempData["Message"]</p>
+            <p><strong>Previous URL:</strong> @TempData["CurrentUrl"]</p>
+            <p><strong>Content ID:</strong> @TempData["ContentId"]</p>
+            <p><strong>Content Name:</strong> @TempData["ContentName"]</p>
+            <p><strong>Content URL:</strong> @TempData["ContentUrl"]</p>
+            <p><strong>Current URL after redirect:</strong> @Context.Request.Path</p>
+        </div>
+    }
+
+    @if (ViewData["Message"] != null)
+    {
+        <div class="alert alert-warning" style="background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; margin-bottom: 20px; border-radius: 4px;">
+            <h4>POST Result (via @ViewData["Method"])</h4>
+            <p>@ViewData["Message"]</p>
+            <p><strong>Previous URL:</strong> @ViewData["CurrentUrl"]</p>
+            <p><strong>Content ID:</strong> @ViewData["ContentId"]</p>
+            <p><strong>Content Name:</strong> @ViewData["ContentName"]</p>
+            <p><strong>Content URL:</strong> @ViewData["ContentUrl"]</p>
+            <p><strong>Current URL (no redirect):</strong> @Context.Request.Path</p>
+        </div>
+    }
+
+    <div style="margin-bottom: 30px;">
+        <h2>Test Instructions</h2>
+        <ol>
+            <li>Visit this page at <code>/virtual-test</code> (virtual page via content finder)</li>
+            <li>Notice that the URL is <code>/virtual-test</code> but the content is from the home page</li>
+            <li>Test each redirect method below and observe the behavior</li>
+            <li>Pay attention to:
+                <ul>
+                    <li>What URL you end up at after the redirect</li>
+                    <li>Whether the page reloads or stays at the same URL</li>
+                    <li>Whether the content finder is invoked again</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <div style="margin-bottom: 30px;">
+        <h2>Expected Behavior</h2>
+        <dl>
+            <dt><strong>RedirectToCurrentUmbracoPage()</strong></dt>
+            <dd>Should redirect to the <em>published content item's URL</em> (@Model.Url()). Does NOT go through content finders again. You should end up at the actual content page, not the virtual page.</dd>
+            
+            <dt><strong>RedirectToCurrentUmbracoUrl()</strong></dt>
+            <dd>Should redirect to the <em>current path</em> (/virtual-test). DOES go through content finders again. You should stay at the virtual page.</dd>
+            
+            <dt><strong>CurrentUmbracoPage()</strong></dt>
+            <dd>Does NOT redirect - returns View() instead. Keeps the current URL. You should stay at /virtual-test without a redirect.</dd>
+        </dl>
+    </div>
+
+    <div class="row" style="display: flex; gap: 20px; flex-wrap: wrap;">
+        <div class="col-md-4" style="flex: 1; min-width: 250px;">
+            <div class="panel panel-default" style="border: 1px solid #ddd; padding: 15px; border-radius: 4px;">
+                <h3>Test 1: RedirectToCurrentUmbracoPage</h3>
+                <p>Should redirect to the actual content URL (@Model.Url())</p>
+                @using (Html.BeginUmbracoForm("TestRedirectToCurrentUmbracoPage", "RedirectTestSurface"))
+                {
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label for="testValue1">Test Value:</label>
+                        <input type="text" class="form-control" id="testValue1" name="testValue" value="Test 1" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Submit</button>
+                }
+            </div>
+        </div>
+
+        <div class="col-md-4" style="flex: 1; min-width: 250px;">
+            <div class="panel panel-default" style="border: 1px solid #ddd; padding: 15px; border-radius: 4px;">
+                <h3>Test 2: RedirectToCurrentUmbracoUrl</h3>
+                <p>Should redirect to current path (/virtual-test)</p>
+                @using (Html.BeginUmbracoForm("TestRedirectToCurrentUmbracoUrl", "RedirectTestSurface"))
+                {
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label for="testValue2">Test Value:</label>
+                        <input type="text" class="form-control" id="testValue2" name="testValue" value="Test 2" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+                    </div>
+                    <button type="submit" class="btn btn-success" style="background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Submit</button>
+                }
+            </div>
+        </div>
+
+        <div class="col-md-4" style="flex: 1; min-width: 250px;">
+            <div class="panel panel-default" style="border: 1px solid #ddd; padding: 15px; border-radius: 4px;">
+                <h3>Test 3: CurrentUmbracoPage</h3>
+                <p>No redirect - returns View() keeping URL</p>
+                @using (Html.BeginUmbracoForm("TestCurrentUmbracoPage", "RedirectTestSurface"))
+                {
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label for="testValue3">Test Value:</label>
+                        <input type="text" class="form-control" id="testValue3" name="testValue" value="Test 3" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+                    </div>
+                    <button type="submit" class="btn btn-warning" style="background-color: #ffc107; color: #212529; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Submit</button>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 30px; padding: 15px; background-color: #f8f9fa; border-left: 4px solid #007bff;">
+        <h3>Testing Notes</h3>
+        <ul>
+            <li>To access the virtual page, navigate to <a href="/virtual-test"><code>/virtual-test</code></a></li>
+            <li>To access the actual home page, navigate to <a href="/"><code>/</code></a> (or @Model.Url())</li>
+            <li>Watch the URL bar and result messages carefully to see the differences</li>
+            <li>The virtual page uses a content finder to serve the home page content at a different URL</li>
+        </ul>
+    </div>
+</div>

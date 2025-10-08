@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36518.9 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UmbracoVirtualRedirectsTest", "UmbracoVirtualRedirectsTest.csproj", "{79870F5B-831A-4CE7-89CF-59CBBADEF98F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{79870F5B-831A-4CE7-89CF-59CBBADEF98F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79870F5B-831A-4CE7-89CF-59CBBADEF98F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79870F5B-831A-4CE7-89CF-59CBBADEF98F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79870F5B-831A-4CE7-89CF-59CBBADEF98F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {598A8346-3B16-425D-9BBA-D258511A08CA}
+	EndGlobalSection
+EndGlobal
